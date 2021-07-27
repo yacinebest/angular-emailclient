@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
-import { AbstractControl, AsyncValidator, FormControl, ValidationErrors } from '@angular/forms';
+import { AbstractControl, AsyncValidator, AsyncValidatorFn, FormControl, ValidationErrors } from '@angular/forms';
 import { map, catchError } from 'rxjs/operators';
 import { Observable, of } from 'rxjs';
-
 import { AuthService } from '../services/auth.service';
 
 @Injectable({
@@ -11,7 +10,7 @@ import { AuthService } from '../services/auth.service';
 export class UniqueUsername implements AsyncValidator {
     constructor(private authService: AuthService) { }
 
-    validate(control: FormControl | AbstractControl): Promise<ValidationErrors | null> | Observable<ValidationErrors | null> {
+    validate = (control: FormControl | AbstractControl) => {
         const { value } = control;
 
         return this.authService.usernameAvailable(value).pipe(
@@ -29,6 +28,5 @@ export class UniqueUsername implements AsyncValidator {
                 }
             })
         );
-    }
-
+    };
 }
