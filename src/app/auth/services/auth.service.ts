@@ -33,7 +33,7 @@ interface SigninCredentials {
   providedIn: 'root'
 })
 export class AuthService {
-  signedin$ = new BehaviorSubject(false);
+  signedin$ = new BehaviorSubject<any>(null);
 
   constructor(private http: HttpClient) { }
 
