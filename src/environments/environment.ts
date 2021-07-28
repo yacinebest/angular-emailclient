@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  AUTH_API_URL: 'https://api.angular-email.com/'
+  API_URL: 'https://api.angular-email.com/'
 };
 
 /*

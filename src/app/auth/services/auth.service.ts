@@ -28,18 +28,24 @@ interface SigninCredentials {
   password: string;
 }
 
+interface SigninResponse {
+  username: string;
+}
+
+
 
 @Injectable({
   providedIn: 'root'
 })
-export class AuthService {
+export class AuthService {//
   signedin$ = new BehaviorSubject<any>(null);
+  username = '';
 
   constructor(private http: HttpClient) { }
 
   usernameAvailable(username: string) {
     return this.http.post<UsernameAvailableResponse>(
-      `${environment.AUTH_API_URL}auth/username`,
+      `${environment.API_URL}auth/username`,
       {
         username
       }
@@ -47,39 +53,43 @@ export class AuthService {
   }
 
   signup(credentials: SignupCredentials) {
-    return this.http.post<SignupResponse>(
-      `${environment.AUTH_API_URL}auth/signup`,
-      credentials).pipe(
-        tap(() => {
+    return this.http
+      .post<SignupResponse>(`${environment.API_URL}auth/signup`, credentials)
+      .pipe(
+        tap(({ username }) => {
           this.signedin$.next(true);
+          this.username = username;
         })
       );
   }
 
   checkAuth() {
     return this.http
-      .get<SignedinResponse>(`${environment.AUTH_API_URL}auth/signedin`)
+      .get<SignedinResponse>(`${environment.API_URL}auth/signedin`)
       .pipe(
-        tap(({ authenticated }) => {
+        tap(({ authenticated, username }) => {
           this.signedin$.next(authenticated);
+          this.username = username;
         })
       );
   }
 
   signout() {
-    return this.http.post(`${environment.AUTH_API_URL}auth/signout`, {}).pipe(
+    return this.http.post(`${environment.API_URL}auth/signout`, {}).pipe(
       tap(() => {
         this.signedin$.next(false);
       })
     );
   }
 
-
   signin(credentials: SigninCredentials) {
-    return this.http.post(`${environment.AUTH_API_URL}auth/signin`, credentials).pipe(
-      tap(() => {
-        this.signedin$.next(true);
-      })
-    );
+    return this.http
+      .post<SigninResponse>(`${environment.API_URL}auth/signin`, credentials)
+      .pipe(
+        tap(({ username }) => {
+          this.signedin$.next(true);
+          this.username = username;
+        })
+      );
   }
 }
