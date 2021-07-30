@@ -1,5 +1,7 @@
 # Emailclient
 
+Email Client is an application with all functionality leaned from other projects
+
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 12.0.4.
 
 ## Development server
